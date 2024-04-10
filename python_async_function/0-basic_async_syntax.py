@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-'''async await'''
+"""Asynchronous coroutine that waits for a random delay between 0 and max_delay seconds (inclusive)."""
 import asyncio, random
 
 
