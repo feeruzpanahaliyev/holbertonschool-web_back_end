@@ -68,11 +68,7 @@ def forbidden(error) -> str:
 
 @app.before_request
 def before_request() -> str:
-    """Execute before each request
-
-        Return:
-            String or nothing
-    """
+"""Execute before each request"""
     if auth is None:
         return
 
