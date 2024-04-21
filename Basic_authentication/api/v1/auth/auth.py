@@ -1,38 +1,39 @@
 #!/usr/bin/env python3
-'''
-manage the API authentification
-'''
+""" auth module
+"""
 from flask import request
-from typing import TypeVar, List
+from typing import List, TypeVar
 
 
-class Auth():
-    '''
-    manage the API authentification
-    '''
+class Auth:
+    '''self descriptive'''
+
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
-        ''' require_authentification '''
-        if path is None:
+        '''self descriptive'''
+        if not path or not excluded_paths:
             return True
-        if excluded_paths is None:
-            return True
-        if len(excluded_paths) == 0:
-            return True
-        if path is None or excluded_paths is None:
-            return True
-        path = path + '/' if path[-1] != '/' else path
-        if path in excluded_paths:
-            return False
+
+        path += '/' if path[-1] != '/' else ''
+        wildcard = any(rex.endswith("*") for rex in excluded_paths)
+
+        if not wildcard:
+            if path in excluded_paths:
+                return False
+
+        for rex in excluded_paths:
+            if rex[-1] == '*':
+                if path.startswith(rex[:-1]):
+                    return False
+            if rex == path:
+                return False
         return True
 
     def authorization_header(self, request=None) -> str:
-        ''' def authorization_header '''
+        '''self descriptive'''
         if request is None:
             return None
-        if 'Authorization' not in request.headers:
-            return None
-        return request.headers['Authorization']
+        return request.headers.get("Authorization")
 
     def current_user(self, request=None) -> TypeVar('User'):
-        ''' def current_user '''
+        '''self descriptive'''
         return None
